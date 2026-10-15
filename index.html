@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0d0c0b;--ink:#ece6da;--muted:#9a9388;--line:#2a2724;--accent:#d9a066;--serif:"PT Serif",Georgia,"Times New Roman",serif}
+:root{--bg:#04060b;--ink:#f4f7ff;--muted:#8a96ad;--line:#16213a;--accent:#3b82ff;--serif:"PT Serif",Georgia,"Times New Roman",serif}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--ink);font:400 1.1rem/1.7 var(--serif)}
@@ -22,10 +22,10 @@ header nav{display:flex;gap:1.75rem}
 header nav a{text-decoration:none;font-style:italic;color:var(--ink)}
 header nav a:hover{color:var(--accent)}
 /* Hero */
-.hero{position:relative;height:100svh;min-height:34rem;display:flex;flex-direction:column;justify-content:center;padding:0 2rem;overflow:hidden;background:#1b1713 center/cover no-repeat}
+.hero{position:relative;height:100svh;min-height:34rem;display:flex;flex-direction:column;justify-content:center;padding:0 2rem;overflow:hidden;isolation:isolate;background:#0a1430}
 .hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#000b 0%,#0003 70%),linear-gradient(#0000 60%,#000a)}
 .hero>*{position:relative}
-.bar{position:absolute!important;left:0;right:0;height:7vh;background:#000;z-index:2;animation:open 1.8s cubic-bezier(.7,0,.2,1) both}
+.bar{position:absolute!important;left:0;right:0;height:7vh;background:#000;z-index:2;animation:open 1.8s cubic-bezier(.7,0,.2,1) both paused}
 .bar.t{top:0}.bar.b{bottom:0}
 @keyframes open{from{height:50vh}to{height:7vh}}
 .hero h1{font:700 clamp(2.8rem,8vw,6.5rem)/1 var(--serif);letter-spacing:-.02em;max-width:12ch}
@@ -37,15 +37,22 @@ h2{font:400 italic clamp(1.8rem,4vw,2.6rem)/1.1 var(--serif);margin-bottom:2.5re
 /* Gallery */
 .gallery{columns:3 320px;column-gap:1.25rem}
 figure{break-inside:avoid;margin-bottom:1.25rem}
-figure button{display:block;width:100%;border:0;padding:0;cursor:zoom-in;background:#1b1713;overflow:hidden}
+figure button{display:block;width:100%;border:0;padding:0;cursor:zoom-in;background:#0a1430;overflow:hidden}
 figure img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.92) contrast(1.05);transition:transform .7s,filter .7s}
 figure button:hover img{transform:scale(1.04);filter:none}
 figcaption{display:flex;justify-content:space-between;gap:1rem;padding-top:.5rem;font-size:.95rem}
 figcaption span{color:var(--muted);font-style:italic}
 .ph{background:linear-gradient(135deg,var(--c1),var(--c2))!important}
+/* Code */
+.projects{list-style:none;padding:0;border-top:1px solid var(--line)}
+.projects a{display:grid;grid-template-columns:5rem 1fr;gap:.2rem 1rem;padding:1.3rem .25rem;border-bottom:1px solid var(--line);text-decoration:none}
+.projects a:hover h3{color:var(--accent)}
+.projects time{color:var(--muted);font-style:italic;grid-row:span 2}
+.projects h3{font:700 1.3rem var(--serif)}
+.projects p{color:var(--muted)}
 /* About */
 .about{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:3rem;align-items:start}
-.portrait{aspect-ratio:4/5;background:#1b1713 center/cover;filter:contrast(1.05) saturate(.9)}
+.portrait{aspect-ratio:4/5;background:#0a1430 center/cover;filter:contrast(1.05) saturate(.9)}
 .about p+p{margin-top:1rem}
 /* Contact */
 .contact a.big{font:700 clamp(1.5rem,5vw,3rem)/1.2 var(--serif);text-decoration-color:var(--accent);text-decoration-thickness:3px;text-underline-offset:8px;word-break:break-all}
@@ -61,32 +68,96 @@ dialog::backdrop{background:#000}
 .lb button{position:absolute;background:none;border:0;color:var(--ink);font:400 2.2rem var(--serif);cursor:pointer;padding:1rem}
 .lb .x{top:.5rem;right:1rem}.lb .pv{left:.5rem;top:45%}.lb .nx{right:.5rem;top:45%}
 .lb button:hover{color:var(--accent)}
+/* Gate (starter screen) */
+#gate{position:fixed;inset:0;z-index:100;background:radial-gradient(ellipse at 50% 42%,#0b1a3d 0%,#04060b 62%,#000 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.1rem;text-align:center;padding:1.5rem;overflow:hidden;transition:opacity 1s ease,visibility 0s 1s}
+#gate::before{content:"";position:absolute;inset:1rem;border:1px solid var(--line);pointer-events:none}
+#gate.done{opacity:0;visibility:hidden;pointer-events:none}
+.g-tag{font:.78rem ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;letter-spacing:.22em;color:var(--muted)}
+.hold{position:relative;width:8.5rem;height:8.5rem;border:0;border-radius:50%;background:none;color:var(--ink);cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;display:grid;place-items:center}
+.hold svg.ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.hold circle{fill:none;stroke-width:2}
+.trk{stroke:var(--line)}
+.prg{stroke:var(--accent);stroke-dasharray:339.3;stroke-dashoffset:339.3;stroke-linecap:round;filter:drop-shadow(0 0 6px var(--accent))}
+.cr{width:1em;height:1em;fill:currentColor;flex:none}
+.hold .cr{font-size:3rem;transition:transform .3s,color .3s}
+.hold.on .cr{color:var(--accent);transform:scale(1.15)}
+.g-hint{font-style:italic;color:var(--muted);transition:opacity .4s}
+#log{font:.9rem/1.75 ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;color:var(--accent);text-align:left;min-height:7em;white-space:pre-wrap;margin:0}
+#verdict{font:700 italic clamp(2.4rem,9vw,4.5rem)/1 var(--serif);letter-spacing:.02em;opacity:0;transform:scale(.94);transition:opacity .8s,transform .8s cubic-bezier(.2,.7,.2,1)}
+#verdict.show{opacity:1;transform:none}
+.skip{position:absolute;right:1.6rem;bottom:1.5rem;background:none;border:0;color:var(--muted);font:italic .95rem var(--serif);cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.skip:hover{color:var(--ink)}
+.scan{position:absolute;left:0;right:0;top:0;height:2px;background:var(--accent);box-shadow:0 0 24px 6px #3b82ff88;opacity:0;pointer-events:none}
+#gate.scanning .scan{opacity:1;animation:sweep 2.2s linear infinite}
+@keyframes sweep{from{transform:translateY(0)}to{transform:translateY(100vh)}}
+/* Gothic code separators */
+.sep{display:flex;align-items:center;gap:1rem;max-width:1240px;margin:4.5rem auto -3rem;padding:0 2rem;color:var(--accent);font:.8rem ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;letter-spacing:.14em;white-space:nowrap}
+.sep .ln{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--accent));transform:scaleX(0);transform-origin:right;transition:transform 1.6s cubic-bezier(.7,0,.2,1)}
+.sep .ln:last-child{background:linear-gradient(90deg,var(--accent),transparent);transform-origin:left}
+.sep .cr{font-size:1.5rem;opacity:0;transform:rotate(-45deg) scale(.6);transition:opacity 1s .5s,transform 1.2s .5s cubic-bezier(.2,.7,.2,1)}
+.sep em{font-style:normal;color:var(--muted)}
+.sep.in .ln{transform:scaleX(1)}
+.sep.in .cr{opacity:1;transform:none}
+/* Motion */
+body.loading{overflow:hidden}
+.hero-bg{position:absolute!important;inset:-10% -4%;z-index:-1;background:center/cover;will-change:transform}
+.bar.t,.bar.b{animation-play-state:paused}
+body.ready .bar{animation-play-state:running}
+.hero h1,.hero .role,.sub{opacity:0}
+body.ready .hero h1{animation:fadeUp 1.3s .9s cubic-bezier(.2,.7,.2,1) both}
+body.ready .hero .role{animation:fadeUp 1.3s 1.2s cubic-bezier(.2,.7,.2,1) both}
+body.ready .sub{animation:fadeUp 1.3s 1.7s cubic-bezier(.2,.7,.2,1) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity 1s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+figure.reveal button{clip-path:inset(100% 0 0 0);transition:clip-path 1.2s cubic-bezier(.7,0,.2,1)}
+figure.reveal.in button{clip-path:inset(0)}
 @media(max-width:760px){
+  .sep{padding:0 1.25rem;font-size:.7rem;gap:.6rem}
   header{padding:.9rem 1.1rem}header nav{gap:1rem}
   .hero,section{padding-left:1.25rem;padding-right:1.25rem}
   .about{grid-template-columns:1fr}.lb{padding:3rem .5rem 1rem}
 }
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.bar{animation:none}figure img{transition:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.bar{animation:none!important}figure img{transition:none}.hero h1,.hero .role,.sub{opacity:1!important;animation:none!important}.reveal,figure.reveal button{opacity:1;transform:none;clip-path:none;transition:none}.sep .ln{transform:scaleX(1);transition:none}.sep .cr{opacity:1;transform:none;transition:none}#gate{display:none}.hero-bg{transform:none!important}}
 </style>
 </head>
-<body>
-<header><b id="brand"></b><nav><a href="#work">Work</a><a href="#about">About</a><a href="#contact">Contact</a></nav></header>
+<body class="loading">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="cr" viewBox="0 0 24 24"><path d="M8.5 0h7l-2.3 6.8 10.3-2v6.4l-10.3-2L15.5 24h-7l2.3-14.8L.5 11.2V4.8l10.3 2z"/></symbol></svg>
+<div id="gate" role="dialog" aria-label="Entry check">
+  <p class="g-tag">GATEKEEPER // ENTRY CHECK</p>
+  <button id="holdBtn" class="hold" aria-label="Press and hold to begin the scan">
+    <svg class="ring" viewBox="0 0 120 120" aria-hidden="true"><circle class="trk" cx="60" cy="60" r="54"/><circle class="prg" id="ring" cx="60" cy="60" r="54"/></svg>
+    <svg class="cr" aria-hidden="true"><use href="#cr"/></svg>
+  </button>
+  <p class="g-hint" id="hint"></p>
+  <pre id="log" aria-live="polite"></pre>
+  <p id="verdict"></p>
+  <button class="skip" id="skip">Skip intro</button>
+  <i class="scan"></i>
+</div>
+<noscript><style>#gate{display:none}.reveal,.hero h1,.hero .role,.sub{opacity:1}</style></noscript>
+<header><b id="brand"></b><nav><a href="#work">Frames</a><a href="#code">Code</a><a href="#about">About</a><a href="#contact">Contact</a></nav></header>
 
 <div class="hero" id="hero">
+  <div class="hero-bg" id="heroBg"></div>
   <div class="bar t"></div><div class="bar b"></div>
-  <h1 id="name"></h1>
-  <p class="role" id="role"></p>
+  <div id="heroTxt"><h1 id="name"></h1>
+  <p class="role" id="role"></p></div>
   <p class="sub" id="tagline"></p>
 </div>
 
 <main>
-  <section id="work"><h2>Selected frames</h2><div class="gallery" id="gallery"></div></section>
-  <section id="about"><h2>About</h2>
-    <div class="about"><div class="portrait" id="portrait" role="img" aria-label="Portrait"></div><div id="bio"></div></div>
+  <section id="work"><h2 class="reveal">Frames</h2><div class="gallery" id="gallery"></div></section>
+  <div class="sep" aria-hidden="true"><span class="ln"></span><em>&lt;/frames&gt;</em><svg class="cr"><use href="#cr"/></svg><span>&lt;code&gt;</span><span class="ln"></span></div>
+  <section id="code"><h2 class="reveal">Code</h2><ul class="projects" id="projects"></ul></section>
+  <div class="sep" aria-hidden="true"><span class="ln"></span><em>&lt;/code&gt;</em><svg class="cr"><use href="#cr"/></svg><span>&lt;about&gt;</span><span class="ln"></span></div>
+  <section id="about"><h2 class="reveal">About</h2>
+    <div class="about"><div class="portrait reveal" id="portrait" role="img" aria-label="Portrait"></div><div id="bio" class="reveal"></div></div>
   </section>
-  <section id="contact" class="contact"><h2>Contact</h2>
-    <p style="margin-bottom:1rem" id="cta"></p>
-    <a class="big" id="mail"></a><ul id="links"></ul>
+  <div class="sep" aria-hidden="true"><span class="ln"></span><em>&lt;/about&gt;</em><svg class="cr"><use href="#cr"/></svg><span>&lt;contact&gt;</span><span class="ln"></span></div>
+  <section id="contact" class="contact"><h2 class="reveal">Contact</h2>
+    <p style="margin-bottom:1rem" id="cta" class="reveal"></p>
+    <a class="big reveal" id="mail"></a><ul id="links" class="reveal"></ul>
   </section>
 </main>
 <footer>© <span id="year"></span> <span id="foot"></span></footer>
@@ -102,24 +173,37 @@ dialog::backdrop{background:#000}
    Any photo that is missing shows a colour placeholder instead. */
 const SITE = {
   name: "Melkior Apta Wardhana",
-  role: "Photographer & Visual Storyteller",           // change to your own title
-  tagline: "Light, grain, and the quiet moments in between.",
+  role: "Cinematographer & Computer Science Student",   // change to your own title
+  tagline: "Frames on screen. Logic behind it.",
   hero: "images/hero.jpg",                              // wide landscape photo, about 2400px wide
   portrait: "images/portrait.jpg",                      // portrait photo, 4:5
   about: [
-    "I'm Melkior, based in Indonesia. I photograph people, streets and light, and I like pictures that feel like a still from a film.",
-    "Write a second paragraph here: your background, what you shoot, the gear you use, who you have worked with."
+    "I'm Melkior. I study computer science and shoot cinematography, and I like work where code and picture meet.",
+    "Write a second paragraph here: what you study, what you shoot, your camera gear, the software you build, who you have worked with."
   ],
-  cta: "Available for commissions and collaborations.",
-  email: "you@example.com",
+  gate: {
+    hint: "Press and hold to prove your worth",
+    lines: [["scanning visitor", "done"], ["checking validity", "valid"], ["measuring worthiness", "passed"]],
+    verdict: "Worthy",
+    granted: "access granted"
+  },
+  cta: "Open to business inquiries and collaborations.",
+  email: "",                                           // add your email to show it as the big link
   links: [
-    { label: "Instagram", url: "https://instagram.com/yourname" },
-    { label: "LinkedIn",  url: "https://linkedin.com/in/yourname" }
+    { label: "Instagram", url: "https://www.instagram.com/melkior.apta.w" },
+    { label: "LinkedIn",  url: "https://www.linkedin.com/in/melkior-apta/" },
+    { label: "GitHub",    url: "https://github.com/Sh4fuu" },
+    { label: "Facebook",  url: "https://www.facebook.com/profile.php?id=61594780830760" }
   ]
 };
+// Your computer science projects: replace these samples
+const PROJECTS = [
+  { year: "2026", title: "Project One", desc: "One sentence on what it does and the tools you used.", url: "https://github.com/Sh4fuu" },
+  { year: "2026", title: "Project Two", desc: "Another project, school work or personal build.", url: "https://github.com/Sh4fuu" }
+];
 // ratio: "3/2" landscape, "2/3" portrait, "1/1" square, "16/9" wide, "4/5" tall-ish
 const PHOTOS = [
-  { src: "images/photo-1.jpg", title: "Frame One",   meta: "Jakarta, 2026", ratio: "3/2" },
+  { src: "images/photo-1.jpg", title: "Frame One",   meta: "Film still, 2026", ratio: "3/2" },
   { src: "images/photo-2.jpg", title: "Frame Two",   meta: "Bandung, 2026", ratio: "2/3" },
   { src: "images/photo-3.jpg", title: "Frame Three", meta: "Yogyakarta, 2025", ratio: "1/1" },
   { src: "images/photo-4.jpg", title: "Frame Four",  meta: "Bali, 2025", ratio: "16/9" },
@@ -129,21 +213,24 @@ const PHOTOS = [
 /* ============ END EDIT ============ */
 
 const $ = s => document.querySelector(s);
-const tones = [["#3a2e24","#14100d"],["#24323a","#0d1215"],["#3a2430","#150d11"],["#2f3a24","#10150d"],["#3a3524","#15130d"],["#2b2440","#100d15"]];
+const tones = [["#17306b","#060b1a"],["#0f2a52","#04080f"],["#22408a","#070d1f"],["#10224a","#03060d"],["#1b3a7a","#050a18"],["#0c1c3d","#020409"]];
 document.title = SITE.name + " – Portfolio";
 $("#brand").textContent = $("#name").textContent = $("#foot").textContent = SITE.name;
 $("#role").textContent = SITE.role; $("#tagline").textContent = SITE.tagline; $("#cta").textContent = SITE.cta;
 $("#year").textContent = new Date().getFullYear();
-$("#hero").style.backgroundImage = `url("${SITE.hero}")`;
+$("#heroBg").style.backgroundImage = `url("${SITE.hero}")`;
 $("#portrait").style.backgroundImage = `url("${SITE.portrait}")`;
 $("#bio").innerHTML = SITE.about.map(t => `<p>${t}</p>`).join("");
-$("#mail").href = "mailto:" + SITE.email; $("#mail").textContent = SITE.email;
+if (SITE.email) { $("#mail").href = "mailto:" + SITE.email; $("#mail").textContent = SITE.email; }
+else { const l = SITE.links[0]; $("#mail").href = l.url; $("#mail").textContent = "Message me on " + l.label; }
+$("#projects").innerHTML = PROJECTS.map(p => `<li class="reveal"><a href="${p.url}" target="_blank" rel="noopener"><time>${p.year}</time><h3>${p.title}</h3><p>${p.desc}</p></a></li>`).join("");
 $("#links").innerHTML = SITE.links.map(l => `<li><a href="${l.url}" target="_blank" rel="noopener">${l.label}</a></li>`).join("");
 
 const g = $("#gallery");
 PHOTOS.forEach((p, i) => {
   const [c1, c2] = tones[i % tones.length];
   const f = document.createElement("figure");
+  f.className = "reveal"; f.style.transitionDelay = (i % 3) * 0.12 + "s";
   f.innerHTML = `<button style="aspect-ratio:${p.ratio};--c1:${c1};--c2:${c2}" aria-label="Open ${p.title}"><img src="${p.src}" alt="${p.title}" loading="lazy"></button><figcaption>${p.title}<span>${p.meta}</span></figcaption>`;
   f.querySelector("img").onerror = e => { e.target.remove(); f.querySelector("button").classList.add("ph"); };
   f.querySelector("button").onclick = () => show(i);
@@ -167,6 +254,86 @@ addEventListener("keydown", e => {
   if (e.key === "ArrowLeft") show(cur - 1);
   if (e.key === "ArrowRight") show(cur + 1);
 });
+
+/* ---------- Motion ---------- */
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// 1. Gate: hold to be scanned, then the site opens
+(function(){
+  const gate = $("#gate"), btn = $("#holdBtn"), ring = $("#ring"), hint = $("#hint"),
+        log = $("#log"), verdict = $("#verdict"), G = SITE.gate, C = 339.3, HOLD = 1800;
+  hint.textContent = G.hint;
+  let done = false, scanning = false, holding = false, p = 0, last = 0, raf = 0;
+  const finish = () => {
+    if (done) return; done = true;
+    gate.classList.add("done");
+    document.body.classList.remove("loading");
+    document.body.classList.add("ready");
+  };
+  $("#skip").onclick = finish;
+  if (RM) return finish();
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const set = v => { p = v; ring.style.strokeDashoffset = C * (1 - v); };
+  async function scan(){
+    scanning = true; holding = false;
+    btn.classList.remove("on"); btn.disabled = true; hint.style.opacity = 0;
+    gate.classList.add("scanning");
+    for (const [text, status] of G.lines) {
+      log.textContent += (log.textContent ? "\n" : "") + "> " + text + " ";
+      await wait(500);
+      log.textContent += "... " + status;
+      await wait(400);
+    }
+    await wait(300);
+    log.textContent += "\n> " + G.granted;
+    verdict.textContent = G.verdict; verdict.classList.add("show");
+    await wait(1600);
+    gate.classList.remove("scanning");
+    finish();
+  }
+  const tick = t => {
+    raf = 0; if (scanning || done) return;
+    const dt = t - last; last = t;
+    set(Math.max(0, Math.min(1, p + (holding ? dt / HOLD : -dt / (HOLD / 2)))));
+    if (p >= 1) return scan();
+    if (holding || p > 0) raf = requestAnimationFrame(tick);
+  };
+  const kick = () => { last = performance.now(); if (!raf) raf = requestAnimationFrame(tick); };
+  const press = () => { if (scanning) return; holding = true; btn.classList.add("on"); kick(); };
+  const release = () => { holding = false; btn.classList.remove("on"); if (!scanning) kick(); };
+  btn.addEventListener("pointerdown", e => { e.preventDefault(); press(); });
+  ["pointerup", "pointerleave", "pointercancel"].forEach(ev => btn.addEventListener(ev, release));
+  btn.addEventListener("keydown", e => { if ((e.key === " " || e.key === "Enter") && !e.repeat) { e.preventDefault(); press(); } });
+  btn.addEventListener("keyup", e => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); release(); } });
+  btn.addEventListener("contextmenu", e => e.preventDefault());
+  btn.focus({ preventScroll: true });
+})();
+
+// 2. Scroll reveals
+if ("IntersectionObserver" in window && !RM) {
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+  }), { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+  document.querySelectorAll(".reveal, .sep").forEach(el => io.observe(el));
+} else {
+  document.querySelectorAll(".reveal, .sep").forEach(el => el.classList.add("in"));
+}
+
+// 3. Hero parallax: photo drifts with the mouse and scroll, title floats up and fades
+if (!RM) {
+  const bg = $("#heroBg"), txt = $("#heroTxt");
+  let mx = 0, my = 0, raf = 0;
+  const draw = () => {
+    raf = 0;
+    const y = Math.min(scrollY, innerHeight);
+    bg.style.transform = `translate3d(${-mx * 30}px, ${y * 0.08 - my * 20}px, 0)`;
+    txt.style.transform = `translateY(${y * 0.15}px)`;
+    txt.style.opacity = Math.max(0, 1 - y / (innerHeight * 0.7));
+  };
+  const queue = () => { if (!raf) raf = requestAnimationFrame(draw); };
+  addEventListener("mousemove", e => { mx = e.clientX / innerWidth - 0.5; my = e.clientY / innerHeight - 0.5; queue(); });
+  addEventListener("scroll", queue, { passive: true });
+}
 </script>
 </body>
 </html>

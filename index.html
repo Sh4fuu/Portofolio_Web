@@ -54,9 +54,7 @@ h2{font:400 italic clamp(1.9rem,4vw,2.8rem)/1.1 var(--display);margin-bottom:2.5
 /* Highlights – "select your game" slideshow */
 .hl{position:relative}
 #work{position:relative}
-#work>*:not(#dots){position:relative;z-index:1}
-#dots{position:absolute;top:0;bottom:0;left:50%;width:100vw;height:100%;transform:translateX(-50%);z-index:0;pointer-events:none;
-  -webkit-mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(transparent,#000 14%,#000 86%,transparent)}
+#dots{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
 .hl-stage{position:relative;height:clamp(15rem,38vw,28rem);perspective:1500px;touch-action:pan-y;user-select:none;-webkit-user-select:none;outline-offset:6px}
 .card{-webkit-tap-highlight-color:transparent;position:absolute;left:50%;top:50%;width:min(62%,44rem);aspect-ratio:16/9;
   --o:0;--a:0;
@@ -247,7 +245,39 @@ body.ready .sub{animation:fadeUp 1.3s 1.7s cubic-bezier(.2,.7,.2,1) both}
 }
 /* very large screens */
 @media(min-width:1600px){html{font-size:18px}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.bar{animation:none!important}.hero h1,.hero .role,.sub{opacity:1!important;animation:none!important}.reveal{opacity:1;transform:none;transition:none}.sep .ln{transform:scaleX(1);transition:none}#gate{display:none}.hero-bg{transform:none!important}.card,.card *{animation:none!important;transition:none!important}.scanfx{display:none}.hl-text>*{animation:none}}
+
+/* Hero donut (ASCII, rotating) */
+.hero>.donut{position:absolute;right:-6vw;top:50%;translate:0 -50%;margin:0;z-index:2;--do:.92;
+  font:700 clamp(.5rem,1.4vw,1.05rem)/1 var(--mono);color:#e8f0ff;white-space:pre;pointer-events:none;user-select:none;-webkit-user-select:none;
+  text-shadow:0 0 2px #000,0 0 10px rgba(0,0,0,.75),0 0 20px rgba(59,130,255,.85);opacity:0}
+body.ready .donut{animation:donutIn 1.6s 1.5s ease both}
+@keyframes donutIn{to{opacity:var(--do)}}
+@media(max-width:760px){.hero>.donut{top:auto;bottom:calc(7vh + 3.4rem);right:50%;translate:50% 0;--do:.5;font-size:clamp(.34rem,2.1vw,.52rem)}}
+
+/* Floating text + hover glow */
+:root{--glow:0 0 22px rgba(255,255,255,.5),0 0 38px rgba(59,130,255,.45);--tglow:0 0 14px rgba(255,255,255,.65),0 0 28px rgba(59,130,255,.55)}
+@keyframes float{0%,100%{translate:0 0}50%{translate:0 -4px}}
+.float{animation:float 6s ease-in-out infinite}
+.float,.reveal.float{transition:text-shadow .3s ease}
+.reveal.float{transition:opacity 1s ease,transform 1s cubic-bezier(.2,.7,.2,1),text-shadow .3s ease}
+body.ready .sub{animation:fadeUp 1.3s 1.7s cubic-bezier(.2,.7,.2,1) both,float 6s ease-in-out 3s infinite}
+.contact ul a,.contact a.big{display:inline-block}
+.hl-nav{transition:background .25s,border-color .25s,transform .25s,scale .25s,box-shadow .25s,color .25s}
+.hl-go{transition:background .25s,color .25s,box-shadow .25s,scale .25s}
+.pip{transition:opacity .3s,transform .3s,border-color .3s,scale .25s,box-shadow .25s}
+.enter{transition:transform .3s,background .3s,opacity .5s,border-color .3s,box-shadow .3s}
+.skip,.lb button,header nav a,.contact ul a,.contact a.big{transition:scale .25s ease,text-shadow .25s ease,color .25s ease}
+@media(hover:hover){
+  .float:hover{text-shadow:var(--tglow)}
+  .hl-nav:hover{scale:1.1;box-shadow:var(--glow)}
+  .hl-go:hover{scale:1.07;box-shadow:var(--glow)}
+  .pip:hover{scale:1.1;box-shadow:var(--glow)}
+  .enter:hover{animation:none;box-shadow:var(--glow),inset 0 0 30px rgba(255,255,255,.1)}
+  .skip:hover,.lb button:hover,header nav a:hover,.contact ul a:hover{scale:1.1;text-shadow:var(--tglow)}
+  .contact a.big:hover{scale:1.03;text-shadow:var(--tglow)}
+  .projects a:hover h3{text-shadow:var(--tglow)}
+}
+@media(prefers-reduced-motion:reduce){.float,body.ready .sub{animation:none}.hero>.donut{opacity:.92}html{scroll-behavior:auto}.bar{animation:none!important}.hero h1,.hero .role,.sub{opacity:1!important;animation:none!important}.reveal{opacity:1;transform:none;transition:none}.sep .ln{transform:scaleX(1);transition:none}#gate{display:none}.hero-bg{transform:none!important}.card,.card *{animation:none!important;transition:none!important}.scanfx{display:none}.hl-text>*{animation:none}}
 </style>
 </head>
 <body class="loading">
@@ -269,13 +299,15 @@ body.ready .sub{animation:fadeUp 1.3s 1.7s cubic-bezier(.2,.7,.2,1) both}
 <div class="hero" id="hero">
   <div class="hero-bg" id="heroBg"><div class="hero-blur" id="heroBlur"></div></div>
   <div class="bar t"></div><div class="bar b"></div>
+  <pre class="donut" id="donut" aria-hidden="true"></pre>
   <div id="heroTxt"><h1 id="name"></h1>
   <p class="role" id="role"></p></div>
   <p class="sub" id="tagline"></p>
 </div>
 
 <main>
-  <section id="work"><canvas id="dots" aria-hidden="true"></canvas><h2 class="reveal">Highlights</h2>
+  <canvas id="dots" aria-hidden="true"></canvas>
+  <section id="work"><h2 class="reveal">Highlights</h2>
     <div class="hl reveal" id="hl">
       <div class="hl-stage" id="hlStage" tabindex="0" aria-roledescription="carousel" aria-label="Highlights. Use left and right arrow keys.">
         <button class="hl-nav prev" id="hlPrev" aria-label="Previous highlight">‹</button>
@@ -316,7 +348,7 @@ const SITE = {
   brand: "M.W",                                         // top-left logo text
   role: "Cinematographer & Computer Science Student",
   tagline: "Frames on screen. Logic behind it.",
-  hero: "images/maincover.JPG",
+  hero: "images/maincover.jpg",
   portrait: "images/portrait.jpg",
   about: [
     "I'm Melkior. I study computer science and shoot cinematography, and I like work where code and picture meet.",
@@ -549,49 +581,55 @@ if (!RM) {
   addEventListener("scroll", queue, { passive: true });
 }
 
-// 4. Highlights background: dot grid with a glowing fisheye lens that follows the pointer
+// 4. Dot-grid background with a soft fisheye lens. It runs from Highlights down to the end of Contact.
 (function(){
-  const cv = $("#dots"), sec = $("#work"), ctx = cv.getContext("2d");
-  const GAP = 26, R = 200, D = 2.6, BASE = 1.15;
+  const cv = $("#dots"), main = $("main"), from = $("#work"), to = $("#contact"), ctx = cv.getContext("2d");
+  const GAP = 26, R = 170, D = 0.85, BASE = 1.1, FADE = GAP * 6;   // D = lens strength (was 2.6), R = lens radius
   let W = 0, H = 0, mx = -9999, my = -9999, tx = mx, ty = my, power = 0, target = 0, raf = 0, vis = false;
   function size(){
-    const r = cv.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
-    W = r.width; H = r.height;
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    W = cv.clientWidth; H = cv.clientHeight;
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); draw();
   }
   function draw(){
     ctx.clearRect(0, 0, W, H);
+    const top = from.getBoundingClientRect().top, bot = to.getBoundingClientRect().bottom;   // region edges in screen coordinates
+    if (bot < 0 || top > H) return;
     const on = power > 0.01;
     if (on) {
       const g = ctx.createRadialGradient(mx, my, 0, mx, my, R * 1.15);
-      g.addColorStop(0, `rgba(255,255,255,${0.13 * power})`); g.addColorStop(1, "rgba(255,255,255,0)");
+      g.addColorStop(0, `rgba(255,255,255,${0.09 * power})`); g.addColorStop(1, "rgba(255,255,255,0)");
       ctx.fillStyle = g; ctx.fillRect(mx - R * 1.2, my - R * 1.2, R * 2.4, R * 2.4);
     }
-    const lens = [];
-    ctx.fillStyle = "rgba(255,255,255,.22)"; ctx.beginPath();
-    for (let y = GAP / 2; y < H; y += GAP) for (let x = GAP / 2; x < W; x += GAP) {
-      if (on && Math.abs(x - mx) < R && Math.abs(y - my) < R) {
-        const d = Math.hypot(x - mx, y - my);
-        if (d < R) { lens.push(x, y, d); continue; }
+    const lens = [], y0 = top + GAP / 2;
+    for (let y = y0 + Math.max(0, Math.ceil(-y0 / GAP)) * GAP; y < Math.min(H, bot); y += GAP) {
+      const a = Math.min(1, (y - top) / FADE, (bot - y) / FADE);        // dots fade in at the start and out at the end
+      if (a <= 0) continue;
+      ctx.fillStyle = `rgba(255,255,255,${0.22 * a})`; ctx.beginPath();
+      for (let x = GAP / 2; x < W; x += GAP) {
+        if (on && Math.abs(x - mx) < R && Math.abs(y - my) < R) {
+          const d = Math.hypot(x - mx, y - my);
+          if (d < R) { lens.push(x, y, d, a); continue; }
+        }
+        ctx.moveTo(x + BASE, y); ctx.arc(x, y, BASE, 0, 6.2832);
       }
-      ctx.moveTo(x + BASE, y); ctx.arc(x, y, BASE, 0, 6.2832);
+      ctx.fill();
     }
-    ctx.fill();
     ctx.shadowColor = "#fff";
-    for (let i = 0; i < lens.length; i += 3) {
-      const x = lens[i], y = lens[i + 1], d = lens[i + 2], t = d / R, prox = 1 - t;
+    for (let i = 0; i < lens.length; i += 4) {
+      const x = lens[i], y = lens[i + 1], d = lens[i + 2], a = lens[i + 3], t = d / R, prox = 1 - t;
       let px = x, py = y, mag = 1;
       if (d > 0.5) {
-        const r2 = R * ((D + 1) * t) / (D * t + 1);          // fisheye: push dots outward, magnify centre
+        const r2 = R * ((D + 1) * t) / (D * t + 1);          // fisheye: pushes dots outward from the pointer
         mag = r2 / d;
         px = x + ((mx + (x - mx) / d * r2) - x) * power;
         py = y + ((my + (y - my) / d * r2) - y) * power;
         mag = 1 + (mag - 1) * power;
       }
-      const rad = BASE * Math.min(1 + (mag - 1) * 1.1, 4.2);
-      ctx.fillStyle = `rgba(255,255,255,${Math.min(1, 0.22 + 0.78 * Math.pow(prox, 1.1) * power)})`;
-      ctx.shadowBlur = 16 * prox * power;
+      const rad = BASE * Math.min(1 + (mag - 1) * 0.6, 2.2);   // dots grow only a little
+      ctx.fillStyle = `rgba(255,255,255,${Math.min(1, 0.22 + 0.6 * Math.pow(prox, 1.1) * power) * a})`;
+      ctx.shadowBlur = 10 * prox * power;
       ctx.beginPath(); ctx.arc(px, py, rad, 0, 6.2832); ctx.fill();
     }
     ctx.shadowBlur = 0;
@@ -607,21 +645,67 @@ if (!RM) {
   }
   const kick = () => { if (!raf && vis) raf = requestAnimationFrame(loop); };
   size();
-  if (RM) return;
+  addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(loop); }, { passive: true });
+  addEventListener("load", draw);
   if ("ResizeObserver" in window) new ResizeObserver(size).observe(cv); else addEventListener("resize", size);
-  new IntersectionObserver(es => { vis = es[0].isIntersecting; if (vis) kick(); }, { rootMargin: "100px" }).observe(sec);
+  if (RM) return;
+  new IntersectionObserver(es => { vis = es[0].isIntersecting; if (vis) kick(); }, { rootMargin: "100px" }).observe(main);
   const move = e => {
-    const r = cv.getBoundingClientRect();
-    tx = e.clientX - r.left; ty = e.clientY - r.top;
+    tx = e.clientX; ty = e.clientY;
     if (target === 0) { mx = tx; my = ty; }
     target = 1; kick();
   };
-  sec.addEventListener("pointermove", move);
-  sec.addEventListener("pointerdown", move);
-  sec.addEventListener("pointerleave", () => { target = 0; kick(); });
-  sec.addEventListener("pointerup", e => { if (e.pointerType !== "mouse") { target = 0; kick(); } });
-  sec.addEventListener("pointercancel", () => { target = 0; kick(); });
+  main.addEventListener("pointermove", move);
+  main.addEventListener("pointerdown", move);
+  main.addEventListener("pointerleave", () => { target = 0; kick(); });
+  main.addEventListener("pointerup", e => { if (e.pointerType !== "mouse") { target = 0; kick(); } });
+  main.addEventListener("pointercancel", () => { target = 0; kick(); });
 })();
+
+// 5. Rotating ASCII donut in the hero (right side)
+(function(){
+  const el = $("#donut"), W = 70, H = 30, CH = ".,-~:;=!*#$@", STEP = 0.02;
+  const N = Math.ceil(6.283 / STEP), sI = new Float32Array(N), cI = new Float32Array(N);
+  for (let k = 0; k < N; k++) { sI[k] = Math.sin(k * STEP); cI[k] = Math.cos(k * STEP); }
+  let A = 1.2, B = 0.4, raf = 0, last = 0;
+  function frame(){
+    const b = new Array(W * H).fill(" "), z = new Float32Array(W * H);
+    const sA = Math.sin(A), cA = Math.cos(A), sB = Math.sin(B), cB = Math.cos(B);
+    for (let j = 0; j < 6.283; j += 0.07) {
+      const ct = Math.cos(j), st = Math.sin(j), h = ct + 2;
+      for (let k = 0; k < N; k++) {
+        const sp = sI[k], cp = cI[k];
+        const dd = 1 / (sp * h * sA + st * cA + 5), t = sp * h * cA - st * sA;
+        const x = (W / 2 + W * 0.375 * dd * (cp * h * cB - t * sB)) | 0;
+        const y = (H / 2 + W * 0.1875 * dd * (cp * h * sB + t * cB)) | 0;
+        if (y <= 0 || y >= H || x <= 0 || x >= W) continue;
+        const o = x + W * y;
+        if (dd > z[o]) {
+          z[o] = dd;
+          const L = (8 * ((st * sA - sp * ct * cA) * cB - sp * ct * sA - st * cA - cp * ct * sB)) | 0;
+          b[o] = CH[Math.min(Math.max(L, 0), CH.length - 1)];
+        }
+      }
+    }
+    let out = "";
+    for (let r = 0; r < H; r++) out += b.slice(r * W, (r + 1) * W).join("") + "\n";
+    el.textContent = out;
+  }
+  frame();
+  if (RM) return;
+  const tick = t => { raf = requestAnimationFrame(tick); if (t - last < 33) return; last = t; A += 0.035; B += 0.018; frame(); };
+  new IntersectionObserver(es => {
+    if (es[0].isIntersecting) { if (!raf) raf = requestAnimationFrame(tick); }
+    else if (raf) { cancelAnimationFrame(raf); raf = 0; }
+  }).observe($("#hero"));
+})();
+
+// 6. Floating text: slow gentle hover. Add or remove selectors in this list.
+if (!RM) {
+  document.querySelectorAll("header b,#heroTxt,main h2,#hlCount,#hlText,.hl-hint,.projects h3,.projects p,.projects time,#bio,#cta,.contact a.big,#links li").forEach(el => {
+    el.classList.add("float"); el.style.animationDelay = (-Math.random() * 6).toFixed(2) + "s";
+  });
+}
 </script>
 </body>
 </html>
